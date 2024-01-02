@@ -21,6 +21,7 @@ body {
   position: relative;
   overflow: hidden;
   height: 100vh;
+  animation: appearance 1s forwards;
   .title {
     color: orangered;
     font-size: 3rem;
@@ -74,5 +75,13 @@ body {
     transform: translate(-50%, -50%);
     object-fit: cover;
     filter: blur(4px);
+  }
+}
+@keyframes appearance {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
