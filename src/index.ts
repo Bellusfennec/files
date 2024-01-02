@@ -1,6 +1,12 @@
 import "./index.scss";
 
-const soundSettings = {
+interface ISoundSettings {
+  icon: string | null;
+  selected: string | null;
+  audio: any;
+}
+
+const soundSettings: ISoundSettings = {
   icon: null,
   selected: null,
   audio: new Audio()
@@ -9,14 +15,14 @@ const soundSettings = {
 function start() {
   displayApp();
   const buttonList = document.querySelectorAll(".button");
-  const input = document.querySelector(".input");
+  const input = document.querySelector(".input") as HTMLInputElement;
   buttonList?.forEach(button => button.addEventListener("click", selectSound));
   input.addEventListener("input", volumeSound);
 }
 
 start();
 
-function selectSound(event) {
+function selectSound(event: any) {
   event.preventDefault();
   const button = event.target.closest(".button");
   const svg = button.querySelector(".svg");
@@ -36,12 +42,12 @@ function selectSound(event) {
   }
 }
 
-function volumeSound(event) {
+function volumeSound(event: any) {
   soundSettings.audio.volume = event.target.value / 100;
 }
 
 function displayApp() {
-  const root = document.querySelector("#root");
+  const root = document.querySelector("#root") as HTMLDivElement;
   root.innerHTML = `
   <div class="wrapper">
     <h1 class="title">Weather sound</h1>
