@@ -6,8 +6,7 @@
     "start": "npx webpack serve --config webpack.config.dev.js",
     "build": "npx webpack --config webpack.config.prod.js",
     "build:dev": "npx webpack --config webpack.config.dev.js",
-    "gh": "git subtree push --prefix dist origin gh-pages",
-    "ghn": "git branch gh-pages && git rebase main && git push origin gh-pages && git checkout main && git subtree push --prefix dist origin gh-pages"
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
