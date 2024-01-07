@@ -1,14 +1,25 @@
 import "./index.scss";
 
+interface IItem {
+  id: number;
+  icon: string;
+  sound: string;
+  bg: string;
+  color: string;
+}
 interface ISoundSettings {
-  icon: string | null;
-  selected: string | null;
+  items: IItem[];
+  selectedId: number | null;
   audio: any;
 }
 
-const soundSettings: ISoundSettings = {
-  icon: null,
-  selected: null,
+const app: ISoundSettings = {
+  items: [
+    { id: 1, icon: "sun.svg", sound: "summer.mp3", bg: "summer-bg.jpg", color: "orangered" },
+    { id: 2, icon: "cloud-rain.svg", sound: "rain.mp3", bg: "rainy-bg.jpg", color: "plum" },
+    { id: 3, icon: "cloud-snow.svg", sound: "winter.mp3", bg: "winter-bg.jpg", color: "darkolivegreen" }
+  ],
+  selectedId: 1,
   audio: new Audio()
 };
 
@@ -24,26 +35,37 @@ start();
 
 function selectSound(event: any) {
   event.preventDefault();
+  const currentButton = document.querySelector(`#button-${app.selectedId}`);
+  const currentSvg = currentButton.querySelector(".svg") as HTMLImageElement;
+  const currentItem = app.items.find(item => item.id === app.selectedId);
+  const currentBackground = document.querySelector(`#bg-${currentItem.id}`) as HTMLImageElement;
   const button = event.target.closest(".button");
   const svg = button.querySelector(".svg");
-  const selected = button.dataset.parent;
+  const id = +button.dataset.id;
+  const item = app.items.find(item => item.id === id);
+  const background = document.querySelector(`#bg-${item.id}`) as HTMLImageElement;
+  const title = document.querySelector(`.title`) as HTMLTitleElement;
 
-  if (soundSettings.selected !== selected) {
-    soundSettings.audio.src = `./assets/sounds/${selected}.mp3`;
-    soundSettings.selected = selected;
+  if (app.selectedId !== id) {
+    currentSvg.src = `./assets/icons/${currentItem.icon}`;
+    background.classList.add("current");
+    currentBackground.classList.remove("current");
+    title.setAttribute("style", `color: ${item.color}`);
+    app.selectedId = id;
+    app.audio.src = `./assets/sounds/${item.sound}`;
   }
-  if (soundSettings.audio.paused === true) {
-    soundSettings.audio.play();
-    soundSettings.icon = svg.src;
+  if (app.audio.paused === true) {
+    app.audio.src = `./assets/sounds/${item.sound}`;
+    app.audio.play();
     svg.src = "./assets/icons/pause.svg";
   } else {
-    soundSettings.audio.pause();
-    svg.src = soundSettings.icon;
+    app.audio.pause();
+    svg.src = `./assets/icons/${item.icon}`;
   }
 }
 
 function volumeSound(event: any) {
-  soundSettings.audio.volume = event.target.value / 100;
+  app.audio.volume = event.target.value / 100;
 }
 
 function displayApp() {
@@ -52,21 +74,20 @@ function displayApp() {
   <div class="wrapper">
     <h1 class="title">Weather sound</h1>
     <main class="sounds">
-      <button class="button" data-parent="summer">
-        <img src="./assets/summer-bg.jpg" class="background">
-        <img src="./assets/icons/sun.svg" class="svg">
-      </button>
-      <button class="button" data-parent="rain">
-        <img src="./assets/rainy-bg.jpg" class="background">
-        <img src="./assets/icons/cloud-rain.svg" class="svg">
-      </button>
-      <button class="button" data-parent="winter">
-        <img src="./assets/winter-bg.jpg" class="background">
-        <img src="./assets/icons/cloud-snow.svg" class="svg">
-      </button>
+    ${app.items
+      .map(
+        item =>
+          `
+        <button class="button" id="button-${item.id}" data-id="${item.id}">
+          <img src="./assets/${item.bg}" class="background">
+          <img src="./assets/icons/${item.icon}" class="svg">
+        </button>
+        `
+      )
+      .join("")}
     </main>
     <input type="range" class="input">
-    <img src="./assets/summer-bg.jpg" class="background">
+    ${app.items.map(item => `<img src="./assets/${item.bg}" class="background" id="bg-${item.id}">`).join("")}
   </div>
   `;
 }
