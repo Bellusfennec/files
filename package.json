@@ -5,7 +5,9 @@
   "scripts": {
     "start": "npx webpack serve --config webpack.config.dev.js",
     "build": "npx webpack --config webpack.config.prod.js",
-    "build:dev": "npx webpack --config webpack.config.dev.js"
+    "build:dev": "npx webpack --config webpack.config.dev.js",
+    "gh": "git subtree push --prefix dist origin gh-pages",
+    "ghn": "git branch gh-pages && git rebase main && git push origin gh-pages && git checkout main && git subtree push --prefix dist origin gh-pages"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
@@ -17,6 +19,7 @@
     "eslint-plugin-n": "^16.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-webpack-plugin": "^4.0.1",
+    "gh-pages": "^6.1.1",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
     "postcss": "^8.4.19",
